@@ -1,0 +1,51 @@
+
+
+jdk8 => HellWorl.java  => compile => HelloWorld.class => version=50 => jrt >=8 => tomcat (jrt8)
+jdk8 => HellWorl2.java  => compile => HelloWorld2.class => version=50 => jrt >=8 => tomcat (jrt8)
+
+2010                                                                                 2020
+jdk8 => HellWorl3.java  => compile => HelloWorld2.class => version=50 => jrt >=11 => tomcat (jrt11) - for security reasons
+
+
+
+
+lambda
+jdk11 => HellWorl.java  => compile => HelloWorld.class => version=51 => jrt >=8 => tomcat (jrt8) 'Error class file version 51 not supported'
+
+lambda
+jdk11 => HellWorl.java  => compile => HelloWorld.class => version=51 => jrt >=11 => tomcat (jrt11)
+
+
+plain web application:
+linux > network setup > java8 > apache server > tomcat > myapp.war
+
+
+Springboot:
+linux > network setup > java8 > apache server > java -jar my.jar
+
+
+key/value pair
+
+id=123
+bassam=meshaal
+
+json;
+""
+[]
+{}
+{ 	"id" : "",
+	"age": 11,
+	"family" : ["father", "mother"],
+	"f2:	 : {
+		"father" : { "name" : "", }
+	}
+}
+
+Restful service > json data exchange
+
+
+
+http request:
+url
+headers - method(get, put, head, ...), content-type: json, binary, xml,
+body - "{}"
