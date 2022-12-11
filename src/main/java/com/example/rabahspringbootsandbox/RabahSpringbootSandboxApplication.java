@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,11 +20,20 @@ public class RabahSpringbootSandboxApplication {
         SpringApplication.run(RabahSpringbootSandboxApplication.class, args);
     }
 
-    @GetMapping("/tasks")
-    public String getTaskList(@RequestParam(value = "tasks" )int taskId){ // json
+    @GetMapping("/task")
+    public String getTask(@RequestParam(value = "tasks" )int taskId){ // json
         log.info("GET Tasks received: " + taskId);
         // write logic to get task from db
-        return "Success - all tasks returned";
+        return "Success - return specific task: " + taskId;
+    }
+    @GetMapping("/tasks")
+    public List<Task>  getAllTasks(){ // json
+        log.info("GET all Tasks");
+        List<Task> rtn = new ArrayList<>();
+        for (Map.Entry<Long, Task> entry : inMemTaskList.entrySet()) {
+            rtn.add(entry.getValue());
+        }
+        return rtn;
     }
 
     @PostMapping(value = "/tasks", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -31,6 +41,7 @@ public class RabahSpringbootSandboxApplication {
         for(Task o : IncomingTaskList){
             log.info("POST Tasks received - id " + o.id + " : " + o.text);
             inMemTaskList.put(o.id, o);
+//            saveToDB(inMemTaskList); mysql db
         }
 
         printMem();
