@@ -1,20 +1,34 @@
 package com.example.rabahspringbootsandbox;
 
 import lombok.extern.java.Log;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.http.MediaType;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.web.bind.annotation.*;
 
+import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@SpringBootApplication
+//@SpringBootApplication
+@SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
 @RestController
 @Log
 public class RabahSpringbootSandboxApplication {
+    public RabahSpringbootSandboxApplication(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    // in app.properties spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+    // @EnableAutoConfiguration(exclude = DataSourceAutoConfiguration.class)
+    public class MyConfiguration { }
 
     public static void main(String[] args) {
         SpringApplication.run(RabahSpringbootSandboxApplication.class, args);
@@ -41,13 +55,23 @@ public class RabahSpringbootSandboxApplication {
         for(Task o : IncomingTaskList){
             log.info("POST Tasks received - id " + o.id + " : " + o.text);
             inMemTaskList.put(o.id, o);
-//            saveToDB(inMemTaskList); mysql db
+            saveToDB(inMemTaskList);
         }
 
         printMem();
 
         // write logic to store task in db
         return "Success";
+    }
+
+    final DataSource dataSource;
+
+
+    private void saveToDB(Map<Long, Task> inMemTaskList) { // TODO
+        // insert into Tasks (title, notes) values ("task4", "bm do something"), ("task5", "bm do something");
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+//        SimpleJdbcInsert
+        jdbcTemplate.update("insert into Tasks values (?, ?, ?)  ", 2, "task", "bm do something from springboot");
     }
 
     private void printMem() {
